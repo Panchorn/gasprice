@@ -19,11 +19,11 @@ class OilPriceService:
 
         filtered_items = self.filter_oil_type(items)
         print(json.dumps(filtered_items))
+        oil_price_message, is_price_change = self.build_response(filtered_items, oil_price_raw)
         if check_price_change:
-            oil_price_message, is_price_change = self.build_response(filtered_items, oil_price_raw)
             return oil_price_message, is_price_change
         else:
-            return self.build_response(filtered_items, oil_price_raw)
+            return oil_price_message
 
     def get_bangchak_price(self):
         response = requests.get(self.url)
