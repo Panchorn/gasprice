@@ -91,7 +91,7 @@ def print_response(filtered_items, oil_price_raw):
     for item in filtered_items:
         part_2 = part_2 + "\n\n" + item['name'] + "\n" + \
                  "วันนี้ " + str(item['today_price']) + " บาท"
-        tmr_price = "พรุ่งนี้ " + str(item['tomorrow_price']) + " บาท"
+        tmr_price = "\nพรุ่งนี้ " + str(item['tomorrow_price']) + " บาท\n"
         if item['diff'] > 0.0:
             part_2 = part_2 + tmr_price + "น้ำมัน ขึ้น ราคา " + str(item['diff']) + " บาท"
         elif item['diff'] < 0.0:
