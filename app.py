@@ -67,9 +67,13 @@ def oil_price_scheduler_task():
         print('No broadcast, price not change')
 
 
-@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='14', hour='1')
+@scheduler.task('cron', id='test', second='0', minute='14', hour='1')
 def test():
-    print('I\'m working every minute' + " at " + datetime.now().strftime("%X"))
+    print('test I\'m working every minute' + " at " + datetime.now().strftime("%X"))
+
+@scheduler.task('cron', id='test2', second='0')
+def test2():
+    print('test2 I\'m working every minute' + " at " + datetime.now().strftime("%X"))
 
 
 if __name__ == '__main__':
