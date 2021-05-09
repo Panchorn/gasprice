@@ -54,7 +54,6 @@ def get_oil_price():
     items = oil_price_raw['header']['item']
 
     filtered_items = filter_oil_type(items)
-    filtered_items[0]['diff'] = 1.0  # for test
     # print(json.dumps(filtered_items))
     return print_response(filtered_items, oil_price_raw)
 
