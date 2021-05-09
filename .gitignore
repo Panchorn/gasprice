@@ -1,6 +1,7 @@
 ### IntelliJ IDEA ###
 .idea
 
+__pycache__
 */__pycache__
 
 vault.py
