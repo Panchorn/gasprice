@@ -6,6 +6,7 @@ from linebot import WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage
 import re
+from datetime import datetime
 
 from models.OilPrice import OilPrice
 from services.handle_service import HandleService
@@ -83,18 +84,18 @@ def mapping_oil_price_response(oil_type, oil_price):
 
 
 def print_response(filtered_items, oil_price_raw):
-    update_date = oil_price_raw['header']['update_date']
     remark_th = oil_price_raw['header']['remark_th']
-    part_1 = "ราคาน้ำมันวันที่ " + update_date
+    now = datetime.now()
+    part_1 = "ราคาน้ำมันวันที่ " + now.strftime("%d/%m/%Y")
     part_2 = ""
     for item in filtered_items:
         part_2 = part_2 + "\n\n" + item['name'] + "\n" + \
-                 "วันนี้ " + str(item['today_price']) + " บาท\n"
-        tmr_price = "พรุ่งนี้ " + str(item['tomorrow_price']) + " บาท\n"
+                 "วันนี้ " + str(item['today_price']) + " บาท"
+        tmr_price = "พรุ่งนี้ " + str(item['tomorrow_price']) + " บาท"
         if item['diff'] > 0.0:
-            part_2 = part_2 + tmr_price + "น้ำมัน `ขึ้น` ราคา *" + str(item['diff']) + "* บาท\n"
+            part_2 = part_2 + tmr_price + "น้ำมัน ขึ้น ราคา " + str(item['diff']) + " บาท"
         elif item['diff'] < 0.0:
-            part_2 = part_2 + tmr_price + "น้ำมัน `ลด` ราคา *" + str(item['diff']) + "* บาท\n"
+            part_2 = part_2 + tmr_price + "น้ำมัน ลด ราคา " + str(item['diff']) + " บาท"
     part_3 = "\n\n" + remark_th.split("*")[-1]
     return part_1 + part_2 + part_3
 
