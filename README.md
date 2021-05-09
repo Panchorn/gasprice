@@ -8,7 +8,11 @@ Although you haven't a bot in friend list, you still get the information by call
 
 ### Prerequisite
 1. Set up virtual env and install library by pip
-2. (Optional) Set local env variable for line bot channel 
+2. Set local env variable for application
+```
+   $ export FLASK_ENV=development
+```
+3. (Optional) Set local env variable for line bot channel 
    (if you have no bot yet, [create one](https://developers.line.biz/en/docs/line-developers-console/overview/#provider))
 ```
    $ export CHANNEL_ACCESS_TOKEN='blah bla bla'

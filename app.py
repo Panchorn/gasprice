@@ -67,10 +67,10 @@ def oil_price_scheduler_task():
         print('No broadcast, price not change')
 
 
-@scheduler.task('cron', id='oil_price_scheduler_task', second='0')
+@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='12', hour='1')
 def test():
     print('I\'m working every minute' + " at " + datetime.now().strftime("%X"))
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(use_reloader=False)
