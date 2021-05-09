@@ -43,6 +43,8 @@ def handle_message(event):
     if is_match:
         oil_price_message = get_oil_price()
         handle.reply_message(event, oil_price_message)
+    else:
+        handle.reply_message(event, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
 
 @app.route('/oil-price')
@@ -51,6 +53,7 @@ def get_oil_price():
     items = oil_price_raw['header']['item']
 
     filtered_items = filter_oil_type(items)
+    filtered_items[0]['diff'] = 1.0  # for test
     # print(json.dumps(filtered_items))
     return print_response(filtered_items, oil_price_raw)
 
@@ -86,12 +89,12 @@ def print_response(filtered_items, oil_price_raw):
     part_2 = ""
     for item in filtered_items:
         part_2 = part_2 + "\n\n" + item['name'] + "\n" + \
-                 "วันนี้ " + str(item['today_price']) + " บาท\n" + \
-                 "พรุ่งนี้ " + str(item['tomorrow_price']) + " บาท\n"
+                 "วันนี้ " + str(item['today_price']) + " บาท\n"
+        tmr_price = "พรุ่งนี้ " + str(item['tomorrow_price']) + " บาท\n"
         if item['diff'] > 0.0:
-            part_2 = part_2 + "น้ำมัน `ขึ้น` ราคา *" + str(item['diff']) + "* บาท\n"
+            part_2 = part_2 + tmr_price + "น้ำมัน `ขึ้น` ราคา *" + str(item['diff']) + "* บาท\n"
         elif item['diff'] < 0.0:
-            part_2 = part_2 + "น้ำมัน `ลด` ราคา *" + str(item['diff']) + "* บาท\n"
+            part_2 = part_2 + tmr_price + "น้ำมัน `ลด` ราคา *" + str(item['diff']) + "* บาท\n"
     part_3 = "\n\n" + remark_th.split("*")[-1]
     return part_1 + part_2 + part_3
 
