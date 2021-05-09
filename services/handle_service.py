@@ -1,5 +1,5 @@
 import os
-from line_service import LineService
+from services.line_service import LineService
 from linebot.models import TextSendMessage
 
 
