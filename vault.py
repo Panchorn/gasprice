@@ -1,0 +1,3 @@
+class Vault:
+  CHANNEL_ID = '1591934803'
+  CHANNEL_SECRET = 'b4d1632f76a47eef0dce253fcf87911e'
