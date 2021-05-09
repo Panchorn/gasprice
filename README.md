@@ -1,6 +1,6 @@
 # Oil Price
 
-## General
+### General
 This project attempt to send you the oil price by Line and notify you when it has changed.
 
 Although you haven't a bot in friend list, you still get the information by call this API
