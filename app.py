@@ -1,5 +1,7 @@
 import os
 import re
+from datetime import datetime
+
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
 from linebot import WebhookHandler
@@ -67,7 +69,7 @@ def oil_price_scheduler_task():
 
 @scheduler.task('cron', id='oil_price_scheduler_task', second='0')
 def test():
-    print('I\'m working every minute')
+    print('I\'m working every minute' + " at " + datetime.now().strftime("%X"))
 
 
 if __name__ == '__main__':
