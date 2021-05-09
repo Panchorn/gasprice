@@ -1,10 +1,19 @@
+import os
 import requests
-from flask import Flask
+from flask import Flask, request, abort
 import xmltodict
+from linebot import WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage
+import re
 
 from models.OilPrice import OilPrice
+from services.handle_service import HandleService
 
 app = Flask(__name__)
+
+handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
+handle = HandleService()
 
 url = 'https://www.bangchak.co.th/api/oilprice'
 oil_list = {'E20', 'Gasohol 91', 'Gasohol 95'}
@@ -13,6 +22,27 @@ oil_list = {'E20', 'Gasohol 91', 'Gasohol 95'}
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    signature = request.headers['X-Line-Signature']
+    body = request.get_data(as_text=True)
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    return 'OK'
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    print(event)
+    message = event.message.text
+    is_match = re.search('ราคาน้ำมัน', message)
+    if is_match:
+        oil_price_message = get_oil_price(event)
+        handle.reply_message(event, oil_price_message)
 
 
 @app.route('/oil-price')
