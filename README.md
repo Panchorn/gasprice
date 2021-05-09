@@ -1,4 +1,4 @@
-# oilprice
+# Oil Price
 
 ## General
 This project attempt to send you the oil price by Line and notify you when it has changed.
