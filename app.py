@@ -65,10 +65,5 @@ def oil_price_scheduler_task():
         print('No broadcast, price not change')
 
 
-@scheduler.task('cron', id='oil_price_scheduler_task')
-def test():
-    print('Broadcasting at 11:00:00 everyday when price change')
-
-
 if __name__ == '__main__':
     app.run()
