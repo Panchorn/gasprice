@@ -1,6 +1,5 @@
 import os
 import re
-from datetime import datetime
 
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
@@ -18,6 +17,7 @@ oilPriceService = OilPriceService()
 
 # Scheduler config
 scheduler = APScheduler()
+scheduler.init_app(app)
 scheduler.start()
 
 
@@ -63,6 +63,11 @@ def oil_price_scheduler_task():
         lineService.broadcast_msg(oil_price_message)
     else:
         print('No broadcast, price not change')
+
+
+@scheduler.task('cron', id='oil_price_scheduler_task')
+def test():
+    print('Broadcasting at 11:00:00 everyday when price change')
 
 
 if __name__ == '__main__':
