@@ -18,7 +18,7 @@ oilPriceService = OilPriceService()
 
 # Scheduler config
 scheduler = APScheduler()
-# scheduler.start()
+scheduler.start()
 
 
 @app.route('/')
@@ -65,14 +65,9 @@ def oil_price_scheduler_task():
         print('No broadcast, price not change')
 
 
-@scheduler.task('cron', id='test', second='0', minute='20', hour='1')
+@scheduler.task('cron', id='test', second='*')
 def test():
     print('test I\'m working every minute' + " at " + datetime.now().strftime("%X"))
-
-
-@scheduler.task('cron', id='test2', second='*')
-def test2():
-    print('test2 I\'m working every minute' + " at " + datetime.now().strftime("%X"))
 
 
 if __name__ == '__main__':
