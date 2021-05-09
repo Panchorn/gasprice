@@ -1,4 +1,5 @@
 from linebot import LineBotApi
+from linebot.models import TextSendMessage
 
 
 class LineService:
@@ -6,11 +7,51 @@ class LineService:
     def __init__(self, channel_access_token):
         self.line_bot_api = LineBotApi(channel_access_token)
 
-    def reply_msg(self, reply_token, messages):
-        self.line_bot_api.reply_message(reply_token, messages)
+    def reply_msg(self, reply_token, msg):
+        self.line_bot_api.reply_message(
+            reply_token,
+            [
+                TextSendMessage(
+                    text=msg,
+                    quick_reply=default_quick_reply_item
+                )
+            ]
+        )
 
-    def push_msg(self, to, messages):
-        self.line_bot_api.push_message(to, messages)
+    def push_msg(self, reply_token, msg):
+        self.line_bot_api.push_message(
+            to=reply_token,
+            messages=[
+                TextSendMessage(
+                    text=msg,
+                    quick_reply=default_quick_reply_item
+                )
+            ]
+        )
+
+    def broadcast_msg(self, msg):
+        self.line_bot_api.broadcast(
+            [
+                TextSendMessage(
+                    text=msg,
+                    quick_reply=default_quick_reply_item
+                )
+            ]
+        )
+
+
+default_quick_reply_item = {
+    'items': [
+        {
+            'type': 'action',
+            'action': {
+                'type': 'message',
+                'label': 'ราคาน้ำมันวันนี้',
+                'text': 'ราคาน้ำมัน'
+            }
+        }
+    ]
+}
 
 # Reference sticker list
 # https://developers.line.biz/media/messaging-api/sticker_list.pdf

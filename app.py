@@ -1,17 +1,24 @@
 import os
 import re
 from flask import Flask, request, abort
+from flask_apscheduler import APScheduler
 from linebot import WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage
-from services.handle_service import HandleWebhookService
+from services.line_service import LineService
 from services.oil_price_service import OilPriceService
 
 app = Flask(__name__)
 
 webhookHandler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
-handleWebhookService = HandleWebhookService()
+lineService = LineService(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 oilPriceService = OilPriceService()
+
+# Scheduler config
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.route('/')
@@ -34,17 +41,28 @@ def webhook():
 def handle_message(event):
     print(event)
     message = event.message.text
+    reply_token = event.reply_token
     is_match = re.search('ราคาน้ำมัน', message)
     if is_match:
-        oil_price_message = get_oil_price()
-        handleWebhookService.reply_message(event, oil_price_message)
+        oil_price_message = oilPriceService.get_oil_price()
+        lineService.reply_msg(reply_token, oil_price_message)
     else:
-        handleWebhookService.reply_message(event, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
+        lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
 
 @app.route('/oil-price')
 def get_oil_price():
     return oilPriceService.get_oil_price()
+
+
+@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='0', hour='11')
+def oil_price_scheduler_task():
+    oil_price_message, is_price_change = oilPriceService.get_oil_price(check_price_change=True)
+    if is_price_change:
+        print('Broadcasting at 11:00:00 everyday when price change')
+        lineService.broadcast_msg(oil_price_message)
+    else:
+        print('No broadcast, price not change')
 
 
 if __name__ == '__main__':
