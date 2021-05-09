@@ -41,7 +41,7 @@ def handle_message(event):
     message = event.message.text
     is_match = re.search('ราคาน้ำมัน', message)
     if is_match:
-        oil_price_message = get_oil_price(event)
+        oil_price_message = get_oil_price()
         handle.reply_message(event, oil_price_message)
 
 
