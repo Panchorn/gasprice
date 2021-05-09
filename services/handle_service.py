@@ -3,7 +3,7 @@ from services.line_service import LineService
 from linebot.models import TextSendMessage
 
 
-class HandleService:
+class HandleWebhookService:
 
     def __init__(self):
         self.line = LineService(os.environ.get('CHANNEL_ACCESS_TOKEN'))
