@@ -11,5 +11,21 @@ class HandleService:
     def reply_message(self, event, message):
         self.line.reply_msg(event.reply_token,
                             [
-                                TextSendMessage(text=message)
+                                TextSendMessage(
+                                    text=message,
+                                    quick_reply=
+                                    {
+                                        'items':
+                                            [
+                                                {
+                                                    'type': 'action',
+                                                    'action': {
+                                                        'type': 'message',
+                                                        'label': 'ราคาน้ำมันวันนี้',
+                                                        'text': 'ราคาน้ำมัน'
+                                                    }
+                                                }
+                                            ]
+                                    }
+                                )
                             ])
