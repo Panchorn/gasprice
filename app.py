@@ -17,10 +17,12 @@ lineService = LineService(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 oilPriceService = OilPriceService()
 
 # Scheduler config
-scheduler = APScheduler()
-scheduler.api_enabled = True
-scheduler.init_app(app)
-scheduler.start()
+if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    # sched.add_interval_job(test_scheduler, seconds=5)
+    scheduler = APScheduler()
+    scheduler.api_enabled = True
+    scheduler.init_app(app)
+    scheduler.start()
 
 
 @app.route('/')
@@ -70,6 +72,7 @@ def oil_price_scheduler_task():
 @scheduler.task('cron', id='test', second='0', minute='20', hour='1')
 def test():
     print('test I\'m working every minute' + " at " + datetime.now().strftime("%X"))
+
 
 @scheduler.task('cron', id='test2', second='0')
 def test2():
