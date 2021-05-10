@@ -55,11 +55,11 @@ def get_oil_price():
     return oilPriceService.get_oil_price()
 
 
-@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='0', hour='11')
+@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='0', hour='9')
 def oil_price_scheduler_task():
     oil_price_message, is_price_change = oilPriceService.get_oil_price(check_price_change=True)
     if is_price_change:
-        print('Broadcasting at 11:00:00 everyday when price change')
+        print('Broadcasting at 09:00:00 everyday when price change')
         lineService.broadcast_msg(oil_price_message)
     else:
         print('No broadcast, price not change')
