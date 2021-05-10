@@ -65,5 +65,4 @@ class GasPriceService:
                 part_2 = part_2 + tmr_price + "น้ำมัน ลด ราคา " + str(item['diff']) + " บาท"
                 is_price_change = True
         part_3 = "\n\n" + remark_th.split("*")[-1]
-        # return part_1 + part_2 + part_3, is_price_change
-        return part_1 + part_2 + part_3, True # todo remove this later when cron works
+        return part_1 + part_2 + part_3, is_price_change
