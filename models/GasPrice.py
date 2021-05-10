@@ -1,4 +1,4 @@
-class OilPrice:
+class GasPrice:
 
     def __init__(self, name, today_price, tomorrow_price, diff):
         self.name = name

@@ -1,12 +1,12 @@
-# Oil Price
+# Gas Price
 
 ### General
-This project attempt to send you the oil price by Line and notify you when it has changed.
+This project attempt to send you the gas price by Line and notify you when it has changed.
 
 Although you haven't a bot in friend list, you still get the information by call this API
-> https://namman.herokuapp.com/oil-price
+> https://namman.herokuapp.com/gas-price
 
-Focus on 3 types of oil (personal attention)
+Focus on 3 types of gas (personal attention)
 1. E20
 2. Gasohol 91
 3. Gasohol 95
@@ -31,9 +31,9 @@ or
 $ python app.py
 ```
 
-### Get oil price information
+### Get gas price information
 ```
-$ curl http://127.0.0.1:5000/oil-price
+$ curl http://127.0.0.1:5000/gas-price
 ```
 
 ### Example response

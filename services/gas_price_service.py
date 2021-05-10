@@ -4,53 +4,53 @@ from datetime import datetime
 import requests
 import xmltodict
 
-from models.OilPrice import OilPrice
+from models.GasPrice import GasPrice
 
 
-class OilPriceService:
+class GasPriceService:
 
     def __init__(self):
         self.url = 'https://www.bangchak.co.th/api/oilprice'
-        self.oil_list = {'E20', 'Gasohol 91', 'Gasohol 95'}
+        self.gas_list = {'E20', 'Gasohol 91', 'Gasohol 95'}
 
-    def get_oil_price(self, check_price_change=False):
-        oil_price_raw = self.get_bangchak_price()
-        items = oil_price_raw['header']['item']
+    def get_gas_price(self, check_price_change=False):
+        gas_price_raw = self.get_bangchak_price()
+        items = gas_price_raw['header']['item']
 
-        filtered_items = self.filter_oil_type(items)
+        filtered_items = self.filter_gas_type(items)
         print(json.dumps(filtered_items))
-        oil_price_message, is_price_change = self.build_response(filtered_items, oil_price_raw)
+        gas_price_message, is_price_change = self.build_response(filtered_items, gas_price_raw)
         if check_price_change:
-            return oil_price_message, is_price_change
+            return gas_price_message, is_price_change
         else:
-            return oil_price_message
+            return gas_price_message
 
     def get_bangchak_price(self):
         response = requests.get(self.url)
         return xmltodict.parse(response.content)
 
-    def filter_oil_type(self, items):
+    def filter_gas_type(self, items):
         filtered = []
         for item in items:
-            for oil_type in self.oil_list:
-                if oil_type in item['type']:
-                    mapped_item = self.mapping_oil_price_response(oil_type, item)
+            for gas_type in self.gas_list:
+                if gas_type in item['type']:
+                    mapped_item = self.mapping_gas_price_response(gas_type, item)
                     filtered.append(mapped_item.__dict__)
         return filtered
 
     @staticmethod
-    def mapping_oil_price_response(oil_type, oil_price):
-        return OilPrice(
-            oil_type,
-            float(oil_price['today']),
-            float(oil_price['tomorrow']),
-            float(oil_price['tomorrow']) - float(oil_price['today']),
+    def mapping_gas_price_response(gas_type, gas_price):
+        return GasPrice(
+            gas_type,
+            float(gas_price['today']),
+            float(gas_price['tomorrow']),
+            float(gas_price['tomorrow']) - float(gas_price['today']),
         )
 
     @staticmethod
-    def build_response(filtered_items, oil_price_raw):
+    def build_response(filtered_items, gas_price_raw):
         is_price_change = False
-        remark_th = oil_price_raw['header']['remark_th']
+        remark_th = gas_price_raw['header']['remark_th']
         now = datetime.now()
         part_1 = "ราคาน้ำมันวันที่ " + now.strftime("%d/%m/%Y")
         part_2 = ""

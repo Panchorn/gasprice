@@ -7,13 +7,13 @@ from linebot import WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage
 from services.line_service import LineService
-from services.oil_price_service import OilPriceService
+from services.gas_price_service import GasPriceService
 
 app = Flask(__name__)
 
 webhookHandler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
 lineService = LineService(os.environ.get('CHANNEL_ACCESS_TOKEN'))
-oilPriceService = OilPriceService()
+gasPriceService = GasPriceService()
 
 # Scheduler config
 scheduler = APScheduler()
@@ -44,23 +44,23 @@ def handle_message(event):
     reply_token = event.reply_token
     is_match = re.search('ราคาน้ำมัน', message)
     if is_match:
-        oil_price_message = oilPriceService.get_oil_price()
-        lineService.reply_msg(reply_token, oil_price_message)
+        gas_price_message = gasPriceService.get_gas_price()
+        lineService.reply_msg(reply_token, gas_price_message)
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
 
-@app.route('/oil-price')
-def get_oil_price():
-    return oilPriceService.get_oil_price()
+@app.route('/gas-price')
+def get_gas_price():
+    return gasPriceService.get_gas_price()
 
 
-@scheduler.task('cron', id='oil_price_scheduler_task', second='0', minute='0', hour='9')
-def oil_price_scheduler_task():
-    oil_price_message, is_price_change = oilPriceService.get_oil_price(check_price_change=True)
+@scheduler.task('cron', id='gas_price_scheduler_task', second='0', minute='0', hour='9')
+def gas_price_scheduler_task():
+    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
     if is_price_change:
         print('Broadcasting at 09:00:00 everyday when price change')
-        lineService.broadcast_msg(oil_price_message)
+        lineService.broadcast_msg(gas_price_message)
     else:
         print('No broadcast, price not change')
 
