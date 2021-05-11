@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
@@ -11,8 +12,8 @@ from services.gas_price_service import GasPriceService
 
 app = Flask(__name__)
 
-webhookHandler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
-lineService = LineService(os.environ.get('CHANNEL_ACCESS_TOKEN'))
+webhookHandler = WebhookHandler(os.getenv('KEY_THAT_MIGHT_EXIST', ''))
+lineService = LineService(os.getenv('CHANNEL_ACCESS_TOKEN', ''))
 gasPriceService = GasPriceService()
 
 # Scheduler config
@@ -63,6 +64,11 @@ def gas_price_scheduler_task():
         lineService.broadcast_msg(gas_price_message)
     else:
         print('No broadcast, price not change')
+
+
+@scheduler.task('cron', id='gas_price_scheduler_task', second='0')
+def ping_task():
+    print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
 
 
 if __name__ == '__main__':
