@@ -12,7 +12,7 @@ from services.gas_price_service import GasPriceService
 
 app = Flask(__name__)
 
-webhookHandler = WebhookHandler(os.getenv('KEY_THAT_MIGHT_EXIST', ''))
+webhookHandler = WebhookHandler(os.getenv('CHANNEL_SECRET', ''))
 lineService = LineService(os.getenv('CHANNEL_ACCESS_TOKEN', ''))
 gasPriceService = GasPriceService()
 
