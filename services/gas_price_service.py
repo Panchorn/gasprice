@@ -44,7 +44,7 @@ class GasPriceService:
             gas_type,
             float(gas_price['today']),
             float(gas_price['tomorrow']),
-            float(gas_price['tomorrow']) - float(gas_price['today']),
+            round(float(gas_price['tomorrow']) - float(gas_price['today']), 2),
         )
 
     @staticmethod
