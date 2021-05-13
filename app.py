@@ -56,19 +56,19 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task', second='0', minute='0', hour='9')
+@scheduler.task('cron', id='gas_price_scheduler_task', second='0', minute='30', hour='16')
 def gas_price_scheduler_task():
     gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
     if is_price_change:
-        print('Broadcasting at 09:00:00 everyday when price change')
+        print('Broadcasting at 16:30:00 everyday when price change')
         lineService.broadcast_msg(gas_price_message)
     else:
         print('No broadcast, price not change')
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task', second='0')
-def ping_task():
-    print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
+# @scheduler.task('cron', id='gas_price_scheduler_task', second='0')
+# def ping_task():
+#     print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
 
 
 if __name__ == '__main__':
