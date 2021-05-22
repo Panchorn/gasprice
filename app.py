@@ -1,6 +1,5 @@
 import os
 import re
-from datetime import datetime
 
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
@@ -24,7 +23,7 @@ scheduler.start()
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!!'
+    return 'Hello World'
 
 
 @app.route('/webhook', methods=['POST'])
@@ -72,4 +71,4 @@ def gas_price_scheduler_task():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=int(os.environ.get('PORT', 8080)))
