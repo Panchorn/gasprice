@@ -25,6 +25,7 @@ scheduler.start()
 
 @app.route('/')
 def hello_world():
+    print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
     return 'Hello World'
 
 
