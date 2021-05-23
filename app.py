@@ -71,4 +71,4 @@ def gas_price_scheduler_task():
 
 
 if __name__ == '__main__':
-    app.run(port=int(os.environ.get('PORT', 8080)))
+    app.run(port=8080)
