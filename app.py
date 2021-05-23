@@ -1,6 +1,8 @@
 import os
 import re
+import requests
 
+from datetime import datetime
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
 from linebot import WebhookHandler
@@ -65,10 +67,11 @@ def gas_price_scheduler_task():
         print('No broadcast, price not change')
 
 
-# @scheduler.task('cron', id='gas_price_scheduler_task', second='0')
-# def ping_task():
-#     print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
+@scheduler.task('interval', id='gas_price_scheduler_task', minutes=29, misfire_grace_time=900)
+def ping_task():
+    print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    requests.get("https://namman.herokuapp.com/")
 
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run()
