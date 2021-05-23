@@ -76,3 +76,9 @@ Gasohol 95
 
 Thanks `Bangchak Corporation Public Company Limited` to provide the API
 > https://www.bangchak.co.th/api/oilprice
+
+
+---
+
+Using `Kaffeine` pings this app every 30 minutes to prevent slepp 
+http://kaffeine.herokuapp.com/
