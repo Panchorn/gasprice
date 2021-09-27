@@ -58,7 +58,7 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task', second='0', minute='45', hour='16')
+@scheduler.task('cron', id='gas_price_scheduler_task', second='0', minute='0', hour='17')
 def gas_price_scheduler_task():
     gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
     if is_price_change:
