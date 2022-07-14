@@ -54,6 +54,7 @@ def handle_message(event):
             lineService.reply_msg(reply_token, gas_price_message)
         except Exception:
             print('Fail to get gas price')
+            lineService.reply_msg(reply_token, 'มีบางอย่างผิดพลาด ลองใหม่อีกทีนะ')
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
