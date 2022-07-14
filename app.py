@@ -1,6 +1,6 @@
 import os
 import re
-import requests
+import time
 
 from datetime import datetime
 from flask import Flask, request, abort
@@ -21,6 +21,8 @@ gasPriceService = GasPriceService()
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
+
+already_broadcast = False
 
 
 @app.route('/')
@@ -58,24 +60,49 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='00', hour='17')
+@scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')
 def gas_price_scheduler_task_1():
-    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-    if is_price_change:
-        print('Broadcasting at 17:00:00 everyday when price change')
-        lineService.broadcast_msg(gas_price_message)
-    else:
-        print('No broadcast, price not change')
+    global already_broadcast
+    already_broadcast = False
+    broadcast_until_success()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task_2', second='0', minute='20', hour='17')
+@scheduler.task('cron', id='gas_price_scheduler_task_2', second='0', minute='00', hour='17')
 def gas_price_scheduler_task_2():
-    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-    if is_price_change:
-        print('Broadcasting at 17:20:00 everyday when price change')
-        lineService.broadcast_msg(gas_price_message)
-    else:
-        print('No broadcast, price not change')
+    broadcast_until_success()
+
+
+@scheduler.task('cron', id='gas_price_scheduler_task_3', second='0', minute='20', hour='17')
+def gas_price_scheduler_task_3():
+    broadcast_until_success()
+
+
+@scheduler.task('cron', id='gas_price_scheduler_task_4', second='0', minute='40', hour='17')
+def gas_price_scheduler_task_4():
+    broadcast_until_success()
+
+
+@scheduler.task('cron', id='gas_price_scheduler_task_5', second='0', minute='00', hour='18')
+def gas_price_scheduler_task_5():
+    broadcast_until_success()
+
+
+def broadcast_until_success():
+    global already_broadcast
+    for _ in range(120):
+        try:
+            gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
+            if is_price_change and not already_broadcast:
+                print('Broadcasting, price changed')
+                lineService.broadcast_msg(gas_price_message)
+                already_broadcast = True
+            else:
+                print('No broadcast, price not change')
+        except Exception:
+            print('Fail to get gas price')
+            time.sleep(10)
+        else:
+            break
 
 
 # @scheduler.task('interval', id='gas_price_scheduler_task', minutes=29, misfire_grace_time=900)
