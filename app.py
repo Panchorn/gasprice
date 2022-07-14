@@ -87,7 +87,7 @@ def gas_price_scheduler_task_5():
     broadcast_until_success()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='10', hour='18')
+@scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='05', hour='18')
 def gas_price_scheduler_task_6():
     broadcast_until_success()
 
