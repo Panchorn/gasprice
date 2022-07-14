@@ -49,8 +49,11 @@ def handle_message(event):
     reply_token = event.reply_token
     is_match = re.search('ราคาน้ำมัน', message)
     if is_match:
-        gas_price_message = gasPriceService.get_gas_price()
-        lineService.reply_msg(reply_token, gas_price_message)
+        try:
+            gas_price_message = gasPriceService.get_gas_price()
+            lineService.reply_msg(reply_token, gas_price_message)
+        except Exception:
+            print('Fail to get gas price')
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
@@ -87,7 +90,7 @@ def gas_price_scheduler_task_5():
     broadcast_until_success()
 
 
-@scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='05', hour='18')
+@scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='15', hour='18')
 def gas_price_scheduler_task_6():
     broadcast_until_success()
 
