@@ -50,6 +50,7 @@ def handle_message(event):
     is_match = re.search('ราคาน้ำมัน', message)
     if is_match:
         try:
+            print('Replying gas price')
             gas_price_message = gasPriceService.get_gas_price()
             lineService.reply_msg(reply_token, gas_price_message)
         except Exception:
