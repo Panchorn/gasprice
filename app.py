@@ -22,6 +22,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
+version = "v1.0.0"
 already_broadcast = False
 
 
@@ -47,8 +48,7 @@ def handle_message(event):
     print(event)
     message = event.message.text
     reply_token = event.reply_token
-    is_match = re.search('ราคาน้ำมัน', message)
-    if is_match:
+    if is_match('ราคาน้ำมัน', message):
         try:
             print('Replying gas price')
             gas_price_message = gasPriceService.get_gas_price()
@@ -56,8 +56,15 @@ def handle_message(event):
         except Exception:
             print('Fail to get gas price')
             lineService.reply_msg(reply_token, 'มีบางอย่างผิดพลาด ลองใหม่อีกทีนะ')
+    elif is_match('version', message):
+        global version
+        lineService.reply_msg(reply_token, version)
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
+
+
+def is_match(word, message):
+    return re.search(word, message)
 
 
 @app.route('/gas-price')
