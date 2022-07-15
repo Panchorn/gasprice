@@ -109,6 +109,7 @@ def broadcast_until_success():
     for _ in range(120):
         try:
             gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
+            print('already_broadcast ' + str(already_broadcast))
             if is_price_change and not already_broadcast:
                 print('Broadcasting, price changed')
                 lineService.broadcast_msg(gas_price_message)
