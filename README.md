@@ -4,12 +4,14 @@
 This project attempt to send you the gas price by Line and notify you when it has changed.
 
 Although you haven't a bot in friend list, you still get the information by call this API
-> https://namman.herokuapp.com/gas-price
+> https://namman.onrender.com/gas-price
 
 Focus on 3 types of gas (personal attention)
 1. E20
 2. Gasohol 91
 3. Gasohol 95
+
+---
 
 ### Prerequisite
 1. Set up virtual env and install library by pip
@@ -24,7 +26,7 @@ $ export CHANNEL_ACCESS_TOKEN='blah bla bla'
 $ export CHANNEL_SECRET='blah bla bla'
 ```
 
-### Start app on your machine
+### Start the service on your machine
 ```
 $ flask run
 or
@@ -35,6 +37,13 @@ $ python app.py
 ```
 $ curl http://127.0.0.1:5000/gas-price
 ```
+
+### Start the service on Render
+```
+$ gunicorn app:app --preload
+```
+
+---
 
 ### Example response
 ```text
@@ -76,9 +85,3 @@ Gasohol 95
 
 Thanks `Bangchak Corporation Public Company Limited` to provide the API
 > https://www.bangchak.co.th/api/oilprice
-
-
----
-
-Using `Kaffeine` pings this app every 30 minutes to prevent slepp 
-http://kaffeine.herokuapp.com/
