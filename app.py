@@ -28,7 +28,7 @@ already_broadcast = False
 
 @app.route('/')
 def hello_world():
-    print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
     return 'Hello World'
 
 
@@ -45,16 +45,16 @@ def webhook():
 
 @webhookHandler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    print(event)
+    app.logger.info(event)
     message = event.message.text
     reply_token = event.reply_token
     if is_match('ราคาน้ำมัน', message):
         try:
-            print('Replying gas price')
+            app.logger.info('Replying gas price')
             gas_price_message = gasPriceService.get_gas_price()
             lineService.reply_msg(reply_token, gas_price_message)
         except Exception:
-            print('Fail to get gas price')
+            app.logger.info('Fail to get gas price')
             lineService.reply_msg(reply_token, 'มีบางอย่างผิดพลาด ลองใหม่อีกทีนะ')
     elif is_match('version', message):
         global version
@@ -72,16 +72,23 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
-@scheduler.task('cron', id='test_2', second='0', minute='15', hour='14')
+@scheduler.task('cron', id='test_1', second='0', minute='35', hour='14')
 def test_2():
-    print('test_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('test_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
+    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
+
+
+@scheduler.task('cron', id='test_2', second='0', minute='30', hour='14')
+def test_2():
+    app.logger.info('test_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
     lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')
 def gas_price_scheduler_task_1():
-    print('starting gas_price_scheduler_task_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     global already_broadcast
     already_broadcast = False
     broadcast_until_success()
@@ -89,31 +96,31 @@ def gas_price_scheduler_task_1():
 
 @scheduler.task('cron', id='gas_price_scheduler_task_2', second='0', minute='00', hour='17')
 def gas_price_scheduler_task_2():
-    print('starting gas_price_scheduler_task_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_3', second='0', minute='20', hour='17')
 def gas_price_scheduler_task_3():
-    print('starting gas_price_scheduler_task_3 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_3 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_4', second='0', minute='40', hour='17')
 def gas_price_scheduler_task_4():
-    print('starting gas_price_scheduler_task_4 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_4 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_5', second='0', minute='00', hour='18')
 def gas_price_scheduler_task_5():
-    print('starting gas_price_scheduler_task_5 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_5 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='20', hour='18')
 def gas_price_scheduler_task_6():
-    print('starting gas_price_scheduler_task_6 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    app.logger.info('starting gas_price_scheduler_task_6 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
@@ -122,15 +129,15 @@ def broadcast_until_success():
     for _ in range(120):
         try:
             gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-            print('already_broadcast ' + str(already_broadcast))
+            app.logger.info('already_broadcast ' + str(already_broadcast))
             if is_price_change and not already_broadcast:
-                print('Broadcasting, price changed')
+                app.logger.info('Broadcasting, price changed')
                 lineService.broadcast_msg(gas_price_message)
                 already_broadcast = True
             else:
-                print('No broadcast, price not change')
+                app.logger.info('No broadcast, price not change')
         except Exception:
-            print('Fail to get gas price')
+            app.logger.error('Fail to get gas price')
             time.sleep(10)
         else:
             break
@@ -138,7 +145,7 @@ def broadcast_until_success():
 
 # @scheduler.task('interval', id='gas_price_scheduler_task', minutes=29, misfire_grace_time=900)
 # def ping_task():
-#     print('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
+#     app.logger.info('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
 #     requests.get("https://namman.herokuapp.com/")
 
 
