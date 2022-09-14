@@ -72,20 +72,7 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
-# @scheduler.task('cron', id='gas_price_scheduler_task_0', second='0', minute='40', hour='10')
-@scheduler.task('cron', id='gas_price_scheduler_task_0', minute='*')
-def gas_price_scheduler_task_0():
-    print('test schedule at ' + datetime.now().strftime("%d/%m/%Y %X"))
-
-
-@scheduler.task('cron', id='test_1', second='0')
-def test_1():
-    print('test_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
-    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
-
-
-@scheduler.task('cron', id='test_2', second='0', minute='40', hour='13')
+@scheduler.task('cron', id='test_2', second='0', minute='15', hour='14')
 def test_2():
     print('test_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
