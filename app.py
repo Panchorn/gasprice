@@ -22,7 +22,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.0.1"
+version = "v1.0.2"
 already_broadcast = False
 
 
@@ -73,13 +73,14 @@ def get_gas_price():
 
 
 # @scheduler.task('cron', id='gas_price_scheduler_task_0', second='0', minute='40', hour='10')
-@scheduler.task('interval', id='gas_price_scheduler_task_0', seconds=5)
+@scheduler.task('interval', id='gas_price_scheduler_task_0', seconds=3, misfire_grace_time=900)
 def gas_price_scheduler_task_0():
     print('test schedule at ' + datetime.now().strftime("%d/%m/%Y %X"))
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')
 def gas_price_scheduler_task_1():
+    print('starting gas_price_scheduler_task_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     global already_broadcast
     already_broadcast = False
     broadcast_until_success()
@@ -87,26 +88,31 @@ def gas_price_scheduler_task_1():
 
 @scheduler.task('cron', id='gas_price_scheduler_task_2', second='0', minute='00', hour='17')
 def gas_price_scheduler_task_2():
+    print('starting gas_price_scheduler_task_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_3', second='0', minute='20', hour='17')
 def gas_price_scheduler_task_3():
+    print('starting gas_price_scheduler_task_3 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_4', second='0', minute='40', hour='17')
 def gas_price_scheduler_task_4():
+    print('starting gas_price_scheduler_task_4 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_5', second='0', minute='00', hour='18')
 def gas_price_scheduler_task_5():
+    print('starting gas_price_scheduler_task_5 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_6', second='0', minute='20', hour='18')
 def gas_price_scheduler_task_6():
+    print('starting gas_price_scheduler_task_6 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     broadcast_until_success()
 
 
