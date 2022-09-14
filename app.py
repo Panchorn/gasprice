@@ -26,7 +26,7 @@ scheduler.start()
 version = "v1.0.8"
 already_broadcast = False
 
-logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
+logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
 
 
 @app.route('/')
