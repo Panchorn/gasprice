@@ -73,7 +73,7 @@ def get_gas_price():
 
 
 # @scheduler.task('cron', id='gas_price_scheduler_task_0', second='0', minute='40', hour='10')
-@scheduler.task('interval', id='gas_price_scheduler_task_0', seconds=3, misfire_grace_time=900)
+@scheduler.task('cron', id='gas_price_scheduler_task_0', minute='*')
 def gas_price_scheduler_task_0():
     print('test schedule at ' + datetime.now().strftime("%d/%m/%Y %X"))
 
