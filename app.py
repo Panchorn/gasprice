@@ -73,7 +73,7 @@ def get_gas_price():
 
 
 @scheduler.task('cron', id='test_1', second='0', minute='35', hour='14')
-def test_2():
+def test_1():
     app.logger.info('test_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
     gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
     lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
