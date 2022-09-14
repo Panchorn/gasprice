@@ -35,7 +35,7 @@ $ python app.py
 
 ### Get gas price information
 ```
-$ curl http://127.0.0.1:5000/gas-price
+$ curl http://127.0.0.1:8000/gas-price
 ```
 
 ### Start the service on Render

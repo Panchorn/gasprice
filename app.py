@@ -35,6 +35,12 @@ def hello_world():
     return 'Hello World'
 
 
+@app.route('/ping')
+def ping():
+    gasPriceService.ping()
+    return 'Success'
+
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     signature = request.headers['X-Line-Signature']
@@ -73,20 +79,6 @@ def is_match(word, message):
 @app.route('/gas-price')
 def get_gas_price():
     return gasPriceService.get_gas_price()
-
-
-@scheduler.task('cron', id='test_1', second='0', minute='15', hour='15')
-def test_1():
-    logging.info('test_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
-    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
-
-
-@scheduler.task('cron', id='test_2', second='0', minute='20', hour='15')
-def test_2():
-    logging.info('test_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
-    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
-    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')

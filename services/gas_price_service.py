@@ -11,7 +11,11 @@ class GasPriceService:
 
     def __init__(self):
         self.url = 'https://www.bangchak.co.th/api/oilprice'
+        self.ping_url = 'https://namman.onrender.com'
         self.gas_list = {'E20', 'Gasohol 91', 'Gasohol 95'}
+
+    def ping(self):
+        requests.get(self.ping_url)
 
     def get_gas_price(self, check_price_change=False):
         gas_price_raw = self.get_bangchak_price()
