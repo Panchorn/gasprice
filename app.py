@@ -22,7 +22,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.0.6"
+version = "v1.0.7"
 already_broadcast = False
 
 
