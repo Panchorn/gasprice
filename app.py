@@ -72,6 +72,13 @@ def get_gas_price():
     return gasPriceService.get_gas_price()
 
 
+@scheduler.task('cron', id='gas_price_scheduler_task_0', second='0', minute='40', hour='10')
+def gas_price_scheduler_task_0():
+    global already_broadcast
+    already_broadcast = True
+    broadcast_until_success()
+
+
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')
 def gas_price_scheduler_task_1():
     global already_broadcast
