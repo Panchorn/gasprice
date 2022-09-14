@@ -18,9 +18,9 @@ class LineService:
             ]
         )
 
-    def push_msg(self, reply_token, msg):
+    def push_msg(self, user_id, msg):
         self.line_bot_api.push_message(
-            to=reply_token,
+            to=user_id,
             messages=[
                 TextSendMessage(
                     text=msg,

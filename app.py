@@ -22,7 +22,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.0.4"
+version = "v1.0.6"
 already_broadcast = False
 
 
@@ -81,11 +81,15 @@ def gas_price_scheduler_task_0():
 @scheduler.task('cron', id='test_1', second='0')
 def test_1():
     print('test_1 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
+    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
 
 
-@scheduler.task('cron', id='test_2', second='0', minute='50', hour='12')
+@scheduler.task('cron', id='test_2', second='0', minute='40', hour='13')
 def test_2():
     print('test_2 at ' + datetime.now().strftime("%d/%m/%Y %X"))
+    gas_price_message, is_price_change = gasPriceService.get_gas_price(check_price_change=True)
+    lineService.push_msg(os.getenv('MY_USER_ID', ''), gas_price_message)
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')
