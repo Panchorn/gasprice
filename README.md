@@ -28,9 +28,9 @@ $ export CHANNEL_SECRET='blah bla bla'
 
 ### Start the service on your machine
 ```
-$ flask run
+$ flask run --port=8000
 or
-$ python app.py
+$ python app.py --port=8000
 ```
 
 ### Get gas price information

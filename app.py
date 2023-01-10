@@ -2,6 +2,8 @@ import os
 import re
 import time
 import logging
+import sys
+import argparse
 
 from datetime import datetime
 from flask import Flask, request, abort
@@ -154,6 +156,12 @@ def broadcast_until_success():
 #     logging.info('Hi I\'m working at ' + datetime.now().strftime("%d/%m/%Y %X"))
 #     requests.get("https://namman.herokuapp.com/")
 
+def get_port():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, default=5000)
+    args = parser.parse_args()
+    return args.port
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=get_port())
