@@ -1,4 +1,6 @@
 import json
+import re
+
 from datetime import datetime
 
 import requests
@@ -11,7 +13,7 @@ class GasPriceService:
     def __init__(self):
         self.url = 'https://www.bangchak.co.th/api/oilprice'
         self.ping_url = 'https://namman.onrender.com'
-        self.gas_list = {'Gasohol E20 S EVO', 'Gasohol 91 S EVO', 'Gasohol 95 S EVO'}
+        self.gas_list = {'Gasohol E20', 'Gasohol 91', 'Gasohol 95'}
 
     def ping(self):
         requests.get(self.ping_url)
@@ -39,10 +41,14 @@ class GasPriceService:
         filtered = []
         for item in items:
             for gas_type in self.gas_list:
-                if gas_type in item['OilNameEng']:
+                if self.is_match("^" + gas_type, item['OilNameEng']):
                     mapped_item = self.mapping_gas_price_response(gas_type, item)
                     filtered.append(mapped_item.__dict__)
         return filtered
+
+    @staticmethod
+    def is_match(word, message):
+        return re.search(word, message)
 
     @staticmethod
     def mapping_gas_price_response(gas_type, gas_price):

@@ -23,7 +23,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.1.0"
+version = "v1.1.1"
 already_broadcast = False
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
@@ -58,20 +58,24 @@ def handle_message(event):
     message = event.message.text
     reply_token = event.reply_token
     if is_match('ราคาน้ำมัน', message):
-        try:
-            logging.info('Replying gas price')
-            gas_price_message = gasPriceService.get_gas_price()
-            lineService.reply_msg(reply_token, gas_price_message)
-        except Exception:
-            logging.info('Fail to get gas price')
-            lineService.reply_msg(reply_token, 'มีบางอย่างผิดพลาด ลองใหม่อีกทีนะ')
+        lineService.reply_msg(reply_token, get_gas_price_reply_message(message))
     elif is_match('version', message):
         global version
         lineService.reply_msg(reply_token, version)
-    elif is_match('ราคาน้ำมัน --raw', message) or is_match('ราคาน้ำมัน -r', message):
-        lineService.reply_msg(reply_token, gasPriceService.get_gas_price_raw())
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
+
+
+def get_gas_price_reply_message(message):
+    try:
+        logging.info('Replying gas price')
+        if is_match('--raw', message) or is_match('-r', message):
+            return gasPriceService.get_gas_price_raw()
+        else:
+            return gasPriceService.get_gas_price()
+    except Exception:
+        logging.info('Fail to get gas price')
+        return 'มีบางอย่างผิดพลาด ลองใหม่อีกทีนะ'
 
 
 def is_match(word, message):
