@@ -23,7 +23,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.0.8"
+version = "v1.1.0"
 already_broadcast = False
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
@@ -68,6 +68,8 @@ def handle_message(event):
     elif is_match('version', message):
         global version
         lineService.reply_msg(reply_token, version)
+    elif is_match('ราคาน้ำมัน --raw', message) or is_match('ราคาน้ำมัน -r', message):
+        lineService.reply_msg(reply_token, gasPriceService.get_gas_price_raw())
     else:
         lineService.reply_msg(reply_token, 'ลองพิมพ์คำว่า \'ราคาน้ำมัน\' ดูนะ')
 
