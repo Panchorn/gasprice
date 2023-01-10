@@ -23,7 +23,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.1.1"
+version = "v1.1.2"
 already_broadcast = False
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
@@ -85,6 +85,11 @@ def is_match(word, message):
 @app.route('/gas-price')
 def get_gas_price():
     return gasPriceService.get_gas_price()
+
+
+@app.route('/gas-price-raw')
+def get_gas_price_raw():
+    return gasPriceService.get_gas_price_raw()
 
 
 @scheduler.task('cron', id='gas_price_scheduler_task_1', second='0', minute='40', hour='16')

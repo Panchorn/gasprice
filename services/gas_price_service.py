@@ -20,7 +20,6 @@ class GasPriceService:
 
     def get_gas_price(self, check_price_change=False):
         gas_price_raw = self.get_bangchak_price()
-        print(gas_price_raw)
         items = gas_price_raw['data']['items']
 
         filtered_items = self.filter_gas_type(items)
@@ -32,7 +31,7 @@ class GasPriceService:
             return gas_price_message
 
     def get_gas_price_raw(self):
-        return self.get_bangchak_price()
+        return json.dumps(self.get_bangchak_price(), indent=2, ensure_ascii=False)
 
     def get_bangchak_price(self):
         return requests.get(self.url).json()
