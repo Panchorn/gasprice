@@ -31,7 +31,7 @@ class GasPriceService:
             return gas_price_message
 
     def get_gas_price_raw(self):
-        return json.dumps(self.get_bangchak_price(), indent=2, ensure_ascii=False)
+        return self.get_bangchak_price()
 
     def get_bangchak_price(self):
         return requests.get(self.url).json()
