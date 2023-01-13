@@ -1,7 +1,7 @@
 import json
 import re
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -21,6 +21,12 @@ class GasPriceService:
     def get_gas_price(self, check_price_change=False):
         gas_price_raw = self.get_bangchak_price()
         items = gas_price_raw['data']['items']
+
+        today = (datetime.today() + timedelta(days=1)).strftime("%d %B %Y")
+        print("checking data effective date match: " + today)
+        if not self.is_match(today, gas_price_raw['data']['remark_en']):
+            print("data out-of-date")
+            return "data out-of-date", False
 
         filtered_items = self.filter_gas_type(items)
         print(json.dumps(filtered_items))
