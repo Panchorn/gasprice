@@ -19,7 +19,7 @@ class GasPriceService:
         requests.get(self.ping_url)
 
     def get_gas_price(self, check_price_change=False):
-        gas_price_raw = self.get_bangchak_price()
+        gas_price_raw = self.get_bangchak_price().json()
         items = gas_price_raw['data']['items']
 
         today = (datetime.today() + timedelta(days=1)).strftime("%d %B %Y")
@@ -37,10 +37,10 @@ class GasPriceService:
             return gas_price_message
 
     def get_gas_price_raw(self):
-        return self.get_bangchak_price()
+        return self.get_bangchak_price().content.decode('UTF-8')
 
     def get_bangchak_price(self):
-        return requests.get(self.url).json()
+        return requests.get(self.url)
 
     def filter_gas_type(self, items):
         filtered = []
