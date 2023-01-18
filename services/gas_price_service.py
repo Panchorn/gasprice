@@ -24,7 +24,7 @@ class GasPriceService:
 
         today = (datetime.today() + timedelta(days=1)).strftime("%d %B %Y")
         print("checking data effective date match: " + today)
-        if not self.is_match(today, gas_price_raw['data']['remark_en']):
+        if check_price_change is True and not self.is_match(today, gas_price_raw['data']['remark_en']):
             print("data out-of-date")
             return "data out-of-date", False
 
