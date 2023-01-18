@@ -25,7 +25,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
-version = "v1.1.2"
+version = "v1.1.3"
 already_broadcast = False
 
 logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p', level=logging.INFO)
